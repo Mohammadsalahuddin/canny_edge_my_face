@@ -1,0 +1,5 @@
+<!--xml-->
+<launch>
+  <node pkg="canny_edge" type="canny_edge_detection" name="canny_edge_detection" output="screen">
+  </node>
+</launch>
