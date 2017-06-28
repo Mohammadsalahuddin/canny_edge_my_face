@@ -1,0 +1,7 @@
+<!--xml-->
+<launch>
+	<include file="$(find cv_camera)/launch/camera_bringup.launch"/>
+	<include file="$(find face_detection)/launch/face_detection.launch"/>
+	<node pkg="canny_edge" type="canny_edge_detection" name="canny_edge_detection" output="screen">
+	</node>
+</launch>
