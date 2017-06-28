@@ -1,3 +1,8 @@
+// ROS Node for canny edge detection
+// author: Uddin
+// uddin@dis.uniroma1.it
+// build from opencv tutorials
+
 #include <ros/ros.h>
 #include <stdio.h>
 #include <iostream>
@@ -29,8 +34,8 @@ class canny_edge_detection
 	ros::NodeHandle n;
  	ros::Publisher pub ;
   	image_transport::ImageTransport it_;    
-  	image_transport::Subscriber image_sub_; //image subscriber 
-  	image_transport::Publisher image_pub_; //image publisher(we subscribe to ardrone image_raw)
+  	image_transport::Subscriber image_sub_; 
+  	image_transport::Publisher image_pub_; 
   	image_transport::Publisher image_pub_edge_;  
   	std_msgs::String msg;
 public:
@@ -38,7 +43,7 @@ public:
     	: it_(nh_)
   {
  
-     	image_sub_ = it_.subscribe("/cv_camera_node/image_raw", 1, &canny_edge_detection::imageCb, this);
+     	image_sub_ = it_.subscribe("/detection/face", 1, &canny_edge_detection::imageCb, this);
      	image_pub_= it_.advertise("/camera/image_processed",1);
      	image_pub_edge_= it_.advertise("/detection/canny_edge",1);
  
@@ -64,30 +69,47 @@ public:
       return;
     }
 
-      Mat out1;
-      Mat gray_out;
-      Mat canny_out;
-      Mat gray_out1;
-      Mat img1;
+      	Mat out1;
+      	Mat gray_out;
+      	Mat canny_out;
+      	Mat gray_out1;
+      	Mat img1;
 
-      cv::cvtColor(cv_ptr->image, gray_out, CV_BGR2GRAY);
-      cv::GaussianBlur(gray_out, gray_out, Size(3, 3), 0, 0);
-      cv::Canny(gray_out, canny_out, 50, 125, 3);
-      cv::cvtColor(canny_out, gray_out1, CV_GRAY2BGR);
+	int edgeThresh = 1;
+	int lowThreshold ;
+	int const max_lowThreshold = 120;
+	int ratio = 3;
+	int kernel_size = 3;
 
-      cv::imshow( "CAMERA FEED", cv_ptr->image);
-      // cv::imshow( "GRAY CAMERA", gray_out);
-      // cv::imshow( "CANNY CAMERA", canny_out);
-       cv::imshow( "CANNY EDGE DETECTION",gray_out1);
-      cvWaitKey(2);
- 
- 	/// Create a Trackbar for user to enter threshold
-  	//createTrackbar( "Min Threshold:", "Canny Edge Detection", &lowThreshold, max_lowThreshold, CannyThreshold );
+	namedWindow( "CANNY EDGE DETECTION", CV_WINDOW_NORMAL );
+	resizeWindow("CANNY EDGE DETECTION", 640, 480);	
+
+	if (!cv_ptr->image.empty())
+	{ 	
+		printf("Wow! I got your Face\n");
+		cv::cvtColor(cv_ptr->image, gray_out, CV_BGR2GRAY);
+  		/// Create a Trackbar for user to enter threshold
+  		createTrackbar( "Min Threshold:", "CANNY EDGE DETECTION", &lowThreshold, max_lowThreshold);
+		cv::GaussianBlur(gray_out, gray_out, Size(3, 3), 0, 0);
+		cv::Canny(gray_out, canny_out, lowThreshold, lowThreshold*ratio, kernel_size);
+
+		cv::cvtColor(canny_out, gray_out1, CV_GRAY2BGR);
+
+    
+		// cv::imshow( "CAMERA FEED", cv_ptr->image);
+      		// cv::imshow( "GRAY CAMERA", gray_out);
+      		// cv::imshow( "CANNY CAMERA", canny_out);
+		cv::imshow( "CANNY EDGE DETECTION",gray_out1);
+      		cvWaitKey(2);
+	}
+	
+	printf("Your Face is MISSING \n");
+
      
-      // publish the raw image 
+	// publish the raw image 
 	image_pub_.publish(cv_ptr->toImageMsg());
-
-      // Publish the image from after edge detection
+	
+	// Publish the image from after edge detection
   	sensor_msgs::ImagePtr msg = cv_bridge::CvImage(std_msgs::Header(), "bgr8", gray_out1).toImageMsg();
 	image_pub_edge_.publish(msg);
  
