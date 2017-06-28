@@ -1,6 +1,6 @@
 # How To use this package #
 
-Canny Edge Detector (on my face). This package take 
+Canny Edge Detector (on my face).
 
 ### What is this repository for? ###
 
