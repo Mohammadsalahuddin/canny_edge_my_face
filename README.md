@@ -1,27 +1,27 @@
-# README #
+# How To use this package #
 
-Some Simple Computer Vision Based Application using OpenCV
+Canny Edge Detector (on my face). This package take 
 
 ### What is this repository for? ###
 
-* Quick summary
-* Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* opencv face detection pkg
+* canny edge detector pkg
+* cv_camera pkg (from ros)
 
 ### How do I get set up? ###
 
-* Summary of set up
-* Configuration
-* Dependencies
-* Database configuration
-* How to run tests
-* Deployment instructions
+* Tasted with ROS indigo 
+* OpenCV 3.0 (mandatory)
+* The location of Haar Cascades file must in "/usr/share/opencv/haarcascades/haarcascade_frontalface_alt.xml" or you may change it from  face_detection.cpp file.
+* It published the output on (/detection/canny_edge), the canny edge detector.
+* A web cam is mandatory.
 
-### Contribution guidelines ###
+### How to run tests ###
 
-* Writing tests
-* Code review
-* Other guidelines
+* Clone the repository on a catkin_workspace
+* catkin_make
+* source devel/setup.bash
+* roslaunch 
 
 ### Who do I talk to? ###
 
