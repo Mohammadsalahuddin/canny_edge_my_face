@@ -10,7 +10,8 @@ Canny Edge Detector (on my face). This package take
 
 ### How do I get set up? ###
 
-* Tasted with ROS indigo 
+* Operating system : Ubuntu 14.04 (64 bit)
+* Tasted with ROS Indigo 
 * OpenCV 3.0 (mandatory)
 * The location of Haar Cascades file must in "/usr/share/opencv/haarcascades/haarcascade_frontalface_alt.xml" or you may change it from  face_detection.cpp file.
 * It published the output on (/detection/canny_edge), the canny edge detector.
@@ -18,12 +19,16 @@ Canny Edge Detector (on my face). This package take
 
 ### How to run tests ###
 
-* Clone the repository on a catkin_workspace
-* catkin_make
+* Clone the workspace
+* inside the workspace run: catkin_make
 * source devel/setup.bash
-* roslaunch 
+* roslaunch canny_edge canny_edge_detector.launch
+* If everything is okay then you will see there image window on your screen.(check the sample screenshot.png)
+* You can also use rqt for visualization
+* cheers
 
-### Who do I talk to? ###
+### Contact information ###
 
-* Repo owner or admin
-* Other community or team contact
+* Mohammad Salah Uddin
+* uddin@dis.uniroma1.it
+* akash.bangla@gmail.com
